@@ -74,4 +74,4 @@ SPREADSHEET_ID =
 RANGE_NAME = 
 
 # Update the Google Sheet with the filtered inverters data
-update_sheet(SPREADSHEET_ID, RANGE_NAME, filtered_inverters)
+update_sheet(SPREADSHEET_ID, RANGE_NAME, filtered_adjusted_inverters)
