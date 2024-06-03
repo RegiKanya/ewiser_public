@@ -37,23 +37,36 @@ def create_timestamp(power_plants):
 # Extract power plants data
 power_plants = data['body']['modbus']['powerPlants']
 latest_timestamps = create_timestamp(power_plants)
+#print(latest_timestamps)
 
 # Define the keys you are interested in
 desired_keys = [
     'powerPlantId', 'name', 'locationCity', 'locationParcelNumber', 
     'totalInverterCount', 'errorInverterCount', 'breakDown', 
     'referenceInverterStatus', 'inverterPowerDifference', 'inverterPowerDifferenceRatio']
-
-# Collect inverters that meet the criteria
 inverters = data['body']['modbus']['powerPlants']
-filtered_inverters = []
 
-for inverter in inverters:
-    if all(key in inverter for key in desired_keys) and inverter['referenceInverterStatus'] != "OK" and (inverter['inverterPowerDifference'] is not None and inverter['inverterPowerDifference'] >= 10) and (inverter['inverterPowerDifferenceRatio'] is not None and inverter['inverterPowerDifferenceRatio'] >= 0.4):
-        filtered_inverters.append([inverter[key] for key in desired_keys])
+def filtered_adjusted_inverters(inverters, desired_keys, latest_timestamps):
+    filtered_inverters = []
 
-for inverter in filtered_inverters:
-    print(f'these are the issues: {inverter}')
+    #Collect inverters that meet the criteria and add the latest timestamp to icident date
+    for inverter in inverters:
+        if all(key in inverter for key in desired_keys) and inverter['referenceInverterStatus'] != "OK" and \
+            (inverter['inverterPowerDifference'] is not None and inverter['inverterPowerDifference'] >= 10) and \
+                (inverter['inverterPowerDifferenceRatio'] is not None and inverter['inverterPowerDifferenceRatio'] >= 0.4):
+                    inverter_data = [inverter[key] for key in desired_keys]
+                    power_plant_id = inverter_data[0]
+
+                    if power_plant_id in latest_timestamps:
+                         inverter_data.append(latest_timestamps[power_plant_id])
+
+                    filtered_inverters.append(inverter_data)
+    return filtered_inverters
+
+result = filtered_adjusted_inverters(inverters, desired_keys, latest_timestamps)
+
+#for item in result: 
+#    print(item)
 
 # filtered_inverters now contains the lists of values to be inserted into the Google sheet columns
 # Define the scope and the credentials file
