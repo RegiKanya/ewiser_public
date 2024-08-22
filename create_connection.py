@@ -1,44 +1,27 @@
 #create connection with the sheet 
-import os
-import json
-import google.auth
-import google.auth.transport.requests
-from google.oauth2.credentials import Credentials
-from google_auth_oauthlib.flow import InstalledAppFlow
-from googleapiclient.discovery import build
+# Importing required library 
+import pygsheets 
+import pandas as pd
+from gsheet_data_filler import filtered_adjusted_inverters,inverters,desired_keys,latest_timestamps
 
-# Define the scope and the credentials file
-SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
-CLIENT_SECRET_FILE = 'client_secret.json'
-TOKEN_FILE = 'token.json'
+# Create the Client 
+client = pygsheets.authorize(service_account_file="ewiser_gsheet.json") 
+#print(client.spreadsheet_titles()) 
 
-def get_credentials():
-    #Gets valid user credentials from storage or OAuth 2.0 flow.
-    creds = None
-    # The file token.json stores the user's access and refresh tokens, and is
-    # created automatically when the authorization flow completes for the first time.
-    if os.path.exists(TOKEN_FILE):
-        creds = Credentials.from_authorized_user_file(TOKEN_FILE, SCOPES)
-    # If there are no (valid) credentials available, let the user log in.
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(google.auth.transport.requests.Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRET_FILE, SCOPES)
-            creds = flow.run_local_server(port=8080)
-        # Save the credentials for the next run
-        with open(TOKEN_FILE, 'w') as token:
-            token.write(creds.to_json())
-    return creds
+def main():
+    sheet = client.open_by_key('19TGlXCCPk_nNtyc1rZlv2l0z5orx7f-xt_xfyEIVXu8')
+    data = filtered_adjusted_inverters(inverters, desired_keys, latest_timestamps)
+    #check that it's a dataframe if not then convert
+    if isinstance(data, list):
+        data = pd.DataFrame(data)
+    worksheet = sheet.worksheet_by_title('RAW')  # or worksheet = sheet.worksheet_by_title('Munkalap neve')
+    worksheet.clear()
+    worksheet.set_dataframe(data, (1, 1), copy_head=False) #(2nd row, 1st column)
+    print("Data has been successfully cleared and reloaded.")
 
-def update_sheet(spreadsheet_id, range_name, values):
-    #Update the Google Sheet with values.
-    credentials = get_credentials()
-    service = build('sheets', 'v4', credentials=credentials)
-    body = {
-        'values': values
-    }
-    result = service.spreadsheets().values().update(
-        spreadsheetId=spreadsheet_id, range=range_name,
-        valueInputOption="RAW", body=body).execute()
-    print(f"{result.get('updatedCells')} cells updated.")
+if __name__ == '__main__':
+    main()
+
+
+
+

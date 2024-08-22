@@ -1,10 +1,9 @@
 import json
 from datetime import datetime
-from create_connection import update_sheet #import the function from create_connection.py file
 import glob
 
 # read the json file in a dynamic way
-folder_path = #insert your local folder path
+folder_path = '/Users/kanyaregina/json_files/'
 json_file = glob.glob(folder_path + '*.json')
 for file_path in json_file:
     with open(file_path, 'r') as f:
@@ -68,10 +67,3 @@ result = filtered_adjusted_inverters(inverters, desired_keys, latest_timestamps)
 #for item in result: 
 #    print(item)
 
-# filtered_inverters now contains the lists of values to be inserted into the Google sheet columns
-# Define the scope and the credentials file
-SPREADSHEET_ID = 
-RANGE_NAME = 
-
-# Update the Google Sheet with the filtered inverters data
-update_sheet(SPREADSHEET_ID, RANGE_NAME, filtered_adjusted_inverters)
