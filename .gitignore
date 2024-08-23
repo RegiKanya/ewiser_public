@@ -1,2 +1,5 @@
 #ignore the secret tokens
 access_details/
+
+#ingore automatic trigger
+hourly-run-script.yml
