@@ -24,4 +24,4 @@ jobs:
 
     - name: Run Python script
       run: |
-        python your_script.py  # Replace with the path to your Python script.
+        python create_connection.py  # Replace with the path to your Python script.
