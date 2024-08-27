@@ -1,5 +1,6 @@
-#ignore the secret tokens
+#ignore folder
 access_details/
 
-#ingore automatic trigger
+#ingore individual files
 hourly-run-script.yml
+create_connection.py
