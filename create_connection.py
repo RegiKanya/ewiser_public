@@ -9,7 +9,7 @@ client = pygsheets.authorize(service_account_file="access_details/ewiser_gsheet.
 #print(client.spreadsheet_titles()) 
 
 def main():
-    sheet = client.open_by_key('1q1nfUqq7RFxn9oPoTXdKtf8tDXV_oo9b1sKfTI5MkkA')
+    sheet = client.open_by_key('1rv3EPJ8OLlZq2foVWexufG2THvwU_IFXH-GdVlWK938')
     data = filtered_adjusted_inverters(inverters, desired_keys, latest_timestamps)
     #check that it's a dataframe if not then convert
     if isinstance(data, list):
