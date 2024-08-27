@@ -16,7 +16,7 @@ def main():
         data = pd.DataFrame(data)
     worksheet = sheet.worksheet_by_title('RAW')  # or worksheet = sheet.worksheet_by_title('Munkalap neve')
     worksheet.clear()
-    worksheet.set_dataframe(data, (2, 1), copy_head=False) #(2nd row, 1st column)
+    worksheet.set_dataframe(data, (1, 1), copy_head=False) #(2nd row, 1st column)
     print("Data has been successfully cleared and reloaded.")
 
 if __name__ == '__main__':
