@@ -4,7 +4,8 @@ import glob
 
 # read the json file in a dynamic way
 folder_path = '/Users/kanyaregina/json_files/'
-json_file = glob.glob(folder_path + '*.json')
+today = datetime.today().strftime('%Y-%m-%d')
+json_file = glob.glob(f"{folder_path}{today}.json")
 for file_path in json_file:
     with open(file_path, 'r') as f:
         data = json.load(f)
