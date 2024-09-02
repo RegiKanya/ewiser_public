@@ -2,7 +2,7 @@ name: Run Python Script Every Hour
 
 on:
   schedule:
-    - cron: "0 * * * *"  # This cron expression means every hour at minute 0.
+    - cron: "0 8 * * *"  # This cron expression means every day at 8.
 
 jobs:
   run-python-script:
