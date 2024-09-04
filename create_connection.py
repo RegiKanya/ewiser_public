@@ -2,7 +2,7 @@
 # Importing required library 
 import pygsheets 
 import pandas as pd
-from gsheet_data_filler import filtered_adjusted_inverters,inverters,desired_keys,latest_timestamps
+from gsheet_data_filler import filtered_adjusted_inverters,inverters,desired_keys,latest_timestamps, json_file
 
 # Create the Client 
 client = pygsheets.authorize(service_account_file="access_details/ewiser_gsheet.json") 
@@ -17,7 +17,7 @@ def main():
     worksheet = sheet.worksheet_by_title('RAW')  # or worksheet = sheet.worksheet_by_title('Munkalap neve')
     worksheet.clear()
     worksheet.set_dataframe(data, (1, 1), copy_head=False) #(2nd row, 1st column)
-    print("Data has been successfully cleared and reloaded.")
+    print(f"DONE - Data has been successfully cleared and reloaded {json_file}.")
 
 if __name__ == '__main__':
     main()
