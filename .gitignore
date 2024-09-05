@@ -3,4 +3,3 @@ access_details/
 
 #ingore individual files
 hourly-run-script.yml
-create_connection.py
