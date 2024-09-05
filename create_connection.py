@@ -5,7 +5,7 @@ import pandas as pd
 from gsheet_data_filler import filtered_adjusted_inverters,inverters,desired_keys,latest_timestamps, json_file
 
 # Create the Client 
-client = pygsheets.authorize(service_account_file="access_details/ewiser_gsheet.json") 
+client = pygsheets.authorize(service_account_file="/Users/kanyaregina/Desktop/access_details/ewiser_gsheet.json") 
 #print(client.spreadsheet_titles()) 
 
 def main():
