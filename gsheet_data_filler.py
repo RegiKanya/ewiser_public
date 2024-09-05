@@ -10,17 +10,27 @@ for file_path in json_file:
     with open(file_path, 'r') as f:
         data = json.load(f)
 
+        # get the 'modbus' data
+        head = data.get('head', {})
+        modbus = head.get('body', {}).get('modbus', {})
+        
+        # if 'powerPlants' object has inverters, then get it
+        power_plants = modbus.get('powerPlants', [])
+        
+        for plant in power_plants:
+            inverters = plant.get('inverters', [])
+
 #create a function which look for timestamp whihch can create the value for 'incident_timestamp'
 def create_timestamp(power_plants):
     # Create a dictionary to store the latest timestamps for each power plant
     power_plants_dict = {}
 
     for power_plant in power_plants:
-        power_plant_id = power_plant['powerPlantId']
+        power_plant_id = power_plant.get('powerPlantId')
         if power_plant_id not in power_plants_dict:
             power_plants_dict[power_plant_id] = None
 
-        inverters = power_plant['inverters']
+        inverters = power_plant.get('inverters', [])
         for inverter in inverters:
             timestamp_str = inverter.get('startTimestamp')
             if timestamp_str:
@@ -34,26 +44,26 @@ def create_timestamp(power_plants):
 
     return power_plants_dict
 
-# Extract power plants data
-power_plants = data['body']['modbus']['powerPlants']
+# Extract power plants data safely using .get()
+power_plants = data.get('body', {}).get('modbus', {}).get('powerPlants', [])
 latest_timestamps = create_timestamp(power_plants)
-#print(latest_timestamps)
 
 # Define the keys you are interested in
 desired_keys = [
     'powerPlantId', 'name', 'locationCity', 'locationParcelNumber', 
     'totalInverterCount', 'errorInverterCount', 'breakDown', 
     'referenceInverterStatus', 'inverterPowerDifference', 'inverterPowerDifferenceRatio']
-inverters = data['body']['modbus']['powerPlants']
+inverters = data.get('body', {}).get('modbus', {}).get('powerPlants', [])
 
 def filtered_adjusted_inverters(inverters, desired_keys, latest_timestamps):
     filtered_inverters = []
 
     #Collect inverters that meet the criteria and add the latest timestamp to icident date
     for inverter in inverters:
-        if all(key in inverter for key in desired_keys) and inverter['referenceInverterStatus'] != "OK" and \
-            (inverter['inverterPowerDifference'] is not None and inverter['inverterPowerDifference'] >= 10) and \
-                (inverter['inverterPowerDifferenceRatio'] is not None and inverter['inverterPowerDifferenceRatio'] >= 0.4):
+        # Check for the most restrictive conditions first for performance
+        if inverter.get('referenceInverterStatus') != "OK" and \
+            (inverter.get('inverterPowerDifference') is not None and inverter['inverterPowerDifference'] >= 10) and \
+            (inverter.get('inverterPowerDifferenceRatio') is not None and inverter['inverterPowerDifferenceRatio'] >= 0.4):
                     inverter_data = [inverter[key] for key in desired_keys]
                     power_plant_id = inverter_data[0]
 
