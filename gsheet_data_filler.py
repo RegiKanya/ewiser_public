@@ -62,8 +62,8 @@ def filtered_adjusted_inverters(inverters, desired_keys, latest_timestamps):
     for inverter in inverters:
         # Check for the most restrictive conditions first for performance
         if inverter.get('referenceInverterStatus') != "OK" and \
-            (inverter.get('inverterPowerDifference') is not None and inverter['inverterPowerDifference'] >= 10) and \
-            (inverter.get('inverterPowerDifferenceRatio') is not None and inverter['inverterPowerDifferenceRatio'] >= 0.4):
+            ((inverter.get('inverterPowerDifference') is not None and inverter['inverterPowerDifference'] >= 10) or \
+            (inverter.get('inverterPowerDifferenceRatio') is not None and inverter['inverterPowerDifferenceRatio'] >= 0.4)):
                     inverter_data = [inverter[key] for key in desired_keys]
                     power_plant_id = inverter_data[0]
 
