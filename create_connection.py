@@ -2,7 +2,7 @@
 # Importing required library 
 import pygsheets 
 import pandas as pd
-from gsheet_data_filler import filtered_adjusted_inverters,inverters,desired_keys,latest_timestamps, json_file
+from gsheet_data_filler import filtered_adjusted_inverters, power_plants, desired_keys,latest_timestamps, json_file, inverters_id_filter, break_down_filtered_date
 
 # Create the Client 
 client = pygsheets.authorize(service_account_file="/Users/kanyaregina/Desktop/access_details/gsheet_ewiser.json") 
@@ -10,7 +10,7 @@ client = pygsheets.authorize(service_account_file="/Users/kanyaregina/Desktop/ac
 
 def main():
     sheet = client.open_by_key('1rv3EPJ8OLlZq2foVWexufG2THvwU_IFXH-GdVlWK938')
-    data = filtered_adjusted_inverters(inverters, desired_keys, latest_timestamps)
+    data = filtered_adjusted_inverters(power_plants, desired_keys, latest_timestamps, inverters_id_filter, break_down_filtered_date)
     #check that it's a dataframe if not then convert
     if isinstance(data, list):
         data = pd.DataFrame(data)
