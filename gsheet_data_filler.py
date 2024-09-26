@@ -67,13 +67,13 @@ def filtered_adjusted_inverters(inverters, desired_keys, latest_timestamps, inve
     #Collect inverters that meet the criteria and modify breakdown value + add the latest timestamp to icident date
     for inverter in inverters:
         power_plant_id = inverter.get('powerPlantId')
-        power_diff = inverter.get('inverterPowerDifference')
-        power_diff_ratio = inverter.get('inverterPowerDifferenceRatio')
+        power_diff = inverter.get('inverterPowerDifference') #do not need to filter
+        power_diff_ratio = inverter.get('inverterPowerDifferenceRatio') #modified 0.4 --> 0.1
 
         # Check for the most restrictive conditions first for performance
         if  power_plant_id not in inverters_id_filter and \
             inverter.get('referenceInverterStatus') != "OK" and \
-                ((power_diff is not None and power_diff >= 10) or (power_diff_ratio is not None and power_diff_ratio >= 0.4)):
+                (power_diff_ratio is not None and power_diff_ratio >= 0.1):
                     inverter_data = [inverter.get(key, None) for key in desired_keys]
 
                     if power_plant_id in latest_timestamps:
