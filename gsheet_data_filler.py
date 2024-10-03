@@ -117,13 +117,13 @@ else:
                 'powerPlantId', 'name', 'locationCity', 'locationParcelNumber', 
                 'totalInverterCount', 'errorInverterCount', 
                 'referenceInverterStatus', 'inverterPowerDifference', 'inverterPowerDifferenceRatio']
-            inverters_id_filter = [408, 409, 415, 455, 1331, 216, 1501, 1502, 596, 597, 1518, 1516, 1513, 1517, 696, 381, 382, 383, 1476, 146, 145, 144, 1620, 1651, 1649, 1653, 1648]
+            pp_id_filter = [408, 409, 415, 455, 1331, 216, 1501, 1502, 1518, 1516, 1513, 1517, 381, 382, 383, 1476, 146, 145, 144, 1620, 1651, 1649, 1653, 1648, 1546, 1548, 1648, 1655, 1651, 1653, 1649, 1598, 1621]
 
             # Assuming latest_timestamps is defined elsewhere in your code
             latest_timestamps = create_timestamp(power_plants)  # Make sure this is properly populated
         
             # Process the inverters and filter them
-            result = filtered_adjusted_inverters(power_plants, desired_keys, latest_timestamps, inverters_id_filter, break_down_filtered_date)
+            result = filtered_adjusted_inverters(power_plants, desired_keys, latest_timestamps, pp_id_filter, break_down_filtered_date)
 
 
             #for item in result: 
