@@ -57,9 +57,15 @@ def create_breakdown_values(power_plants):
 # Extract power plants data safely using .get()
 #power_plants = data.get('body', {}).get('modbus', {}).get('powerPlants', [])
 #latest_timestamps = create_timestamp(power_plants)
-
 #break_down_filtered = data.get('body', {}).get('modbus', {}).get('powerPlants',[])
 #break_down_filtered_date = create_breakdown_values(power_plants)
+
+#make the power difference ratio prettier and multiple with 100 to show the percantage
+def format_power_diff_ratio(power_diff_ratio):
+    if power_diff_ratio is None:
+        return None
+    return round(power_diff_ratio * 100, 2)
+
 
 def filtered_adjusted_inverters(inverters, desired_keys, latest_timestamps, pp_id_filter, break_down_filtered_date):
     filtered_inverters = []
@@ -74,6 +80,9 @@ def filtered_adjusted_inverters(inverters, desired_keys, latest_timestamps, pp_i
         if  power_plant_id not in pp_id_filter:
             if (inverter.get('referenceInverterStatus') != "OK" or power_diff_ratio is not None and power_diff_ratio >= 0.1):
                     inverter_data = [inverter.get(key, None) for key in desired_keys]
+
+                    formatted_power_diff_ratio = format_power_diff_ratio(power_diff_ratio)
+                    inverter_data.insert(10, formatted_power_diff_ratio)
 
                     if power_plant_id in latest_timestamps:
                         inverter_data.append(latest_timestamps[power_plant_id])
@@ -117,8 +126,10 @@ else:
             desired_keys = [
                 'powerPlantId', 'name', 'locationCity', 'locationParcelNumber', 
                 'totalInverterCount', 'errorInverterCount', 
-                'referenceInverterStatus', 'inverterPowerDifference', 'inverterPowerDifferenceRatio']
-            pp_id_filter = [408, 409, 415, 455, 1331, 216, 1501, 1502, 1518, 1516, 1513, 1517, 381, 382, 383, 1476, 146, 145, 144, 1620, 1651, 1649, 1653, 1648, 1546, 1548, 1648, 1655, 1651, 1653, 1649, 1598, 1621]
+                'referenceInverterStatus', 'inverterPowerDifference']
+            pp_id_filter = [408, 409, 415, 455, 1331, 216, 1501, 1502, 1518, 1516, 1513, 1517, 381, 382, 
+                            383, 1476, 146, 145, 144, 1620, 1651, 1649, 1653, 1648, 1546, 1548, 1648, 1655, 
+                            1651, 1653, 1649, 1598, 1621]
 
             # Assuming latest_timestamps is defined elsewhere in your code
             latest_timestamps = create_timestamp(power_plants)  # Make sure this is properly populated
@@ -127,6 +138,6 @@ else:
             result = filtered_adjusted_inverters(power_plants, desired_keys, latest_timestamps, pp_id_filter, break_down_filtered_date)
 
 
-            for item in result: 
-                print(item)
+            #for item in result: 
+                #print(item)
 
