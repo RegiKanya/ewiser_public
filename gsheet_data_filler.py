@@ -61,19 +61,18 @@ def create_breakdown_values(power_plants):
 #break_down_filtered = data.get('body', {}).get('modbus', {}).get('powerPlants',[])
 #break_down_filtered_date = create_breakdown_values(power_plants)
 
-def filtered_adjusted_inverters(inverters, desired_keys, latest_timestamps, inverters_id_filter, break_down_filtered_date):
+def filtered_adjusted_inverters(inverters, desired_keys, latest_timestamps, pp_id_filter, break_down_filtered_date):
     filtered_inverters = []
 
     #Collect inverters that meet the criteria and modify breakdown value + add the latest timestamp to icident date
     for inverter in inverters:
         power_plant_id = inverter.get('powerPlantId')
-        power_diff = inverter.get('inverterPowerDifference') #do not need to filter
+        #power_diff = inverter.get('inverterPowerDifference') #do not need to filter
         power_diff_ratio = inverter.get('inverterPowerDifferenceRatio') #modified 0.4 --> 0.1
 
-        # Check for the most restrictive conditions first for performance
-        if  power_plant_id not in inverters_id_filter and \
-            inverter.get('referenceInverterStatus') != "OK" and \
-                (power_diff_ratio is not None and power_diff_ratio >= 0.1):
+        # Check for the conditions
+        if  power_plant_id not in pp_id_filter:
+            if (inverter.get('referenceInverterStatus') != "OK" or power_diff_ratio is not None and power_diff_ratio >= 0.1):
                     inverter_data = [inverter.get(key, None) for key in desired_keys]
 
                     if power_plant_id in latest_timestamps:
@@ -83,6 +82,8 @@ def filtered_adjusted_inverters(inverters, desired_keys, latest_timestamps, inve
                         inverter_data.insert(6, break_down_filtered_date[power_plant_id])
 
                     filtered_inverters.append(inverter_data)
+        else: 
+            pass
     return filtered_inverters
 
 # read the json file in a dynamic way
@@ -126,6 +127,6 @@ else:
             result = filtered_adjusted_inverters(power_plants, desired_keys, latest_timestamps, pp_id_filter, break_down_filtered_date)
 
 
-            #for item in result: 
-                #print(item)
+            for item in result: 
+                print(item)
 
