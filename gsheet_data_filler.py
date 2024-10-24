@@ -29,27 +29,35 @@ def create_timestamp(power_plants):
 def create_breakdown_values(power_plants):
     break_down_dict = {}
 
+    power_plants = data.get('body', {}).get('modbus',{}).get('powerPlants', [])
+
     for power_plant in power_plants:
         power_plant_id = power_plant.get('powerPlantId')
         if power_plant_id not in break_down_dict:
             break_down_dict[power_plant_id] = 'Nincs'
         
-        inverters = power_plant.get('inverters', [])
-        for inverter in inverters:
-            breakdown = inverter.get('breakDown', {})
+        #inverters = power_plant.get('inverters', [])
+        breakdown = power_plant.get('breakDown', {})
+        if breakdown is not None:
             formatted_date = breakdown.get('interval')
             if formatted_date:
-                start_iso, end_iso = formatted_date.split("/")
-    
-                # Parse the ISO 8601 dates into datetime objects
-                start_dt = datetime.fromisoformat(start_iso.replace('Z', '+00:00'))
-                end_dt = datetime.fromisoformat(end_iso.replace('Z', '+00:00'))
-    
-                # Format the dates into "yyyy-MM-dd"
-                start_str = start_dt.strftime("%Y-%m-%d")
-                end_str = end_dt.strftime("%Y-%m-%d")
+                try:
+                    start_iso, end_iso = formatted_date.split("/")
+        
+                    # Parse the ISO 8601 dates into datetime objects
+                    start_dt = datetime.fromisoformat(start_iso.replace('Z', '+00:00'))
+                    end_dt = datetime.fromisoformat(end_iso.replace('Z', '+00:00'))
+        
+                    # Format the dates into "yyyy-MM-dd"
+                    start_str = start_dt.strftime("%Y-%m-%d")
+                    end_str = end_dt.strftime("%Y-%m-%d")
 
-                break_down_dict[power_plant_id] = f"{start_str} - {end_str}"
+                    break_down_dict[power_plant_id] = f"{start_str} - {end_str}"
+                except ValueError as e:
+                    print(f"Error while handling the dates in powerPlants {power_plant_id}: {e}")
+                    break_down_dict[power_plant_id] = "Incorret date"
+        else:
+            break_down_dict[power_plant_id] = 'Nincs'
     
     # Return after the outer loop finishes processing all power plants
     return break_down_dict
@@ -101,22 +109,21 @@ today = datetime.today().strftime('%Y-%m-%d')
 json_file = glob.glob(f"{folder_path}{today}.json")
 
 if not json_file:
-    print(f"No JSON file found for {today}..")
+    print(f"🚨 No JSON file found for {today}.")
 else:
     for file_path in json_file:
         with open(file_path, 'r') as f:
             try:
                 data = json.load(f)
             except json.JSONDecodeError:
-                print(f"Error reading JSON file: {file_path}")
+                print(f"🚨 Error reading JSON file: {file_path}")
                 continue
 
-            # Ensure that 'modbus' data is properly extracted
             modbus_data = data.get('body', {}).get('modbus', {})
             power_plants = modbus_data.get('powerPlants', [])
 
-            if not power_plants:
-                print(f"No power plants found in {file_path}")
+            if not power_plants:  
+                print(f"🚨 No power plants found in {file_path}")
                 continue
 
             # Create breakdown values for the power plants
@@ -132,12 +139,12 @@ else:
                             1651, 1653, 1649, 1598, 1621]
 
             # Assuming latest_timestamps is defined elsewhere in your code
-            latest_timestamps = create_timestamp(power_plants)  # Make sure this is properly populated
+            latest_timestamps = create_timestamp(power_plants)  
         
             # Process the inverters and filter them
             result = filtered_adjusted_inverters(power_plants, desired_keys, latest_timestamps, pp_id_filter, break_down_filtered_date)
 
 
-            #for item in result: 
-                #print(item)
+            for item in result: 
+                print(item)
 
