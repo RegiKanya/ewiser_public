@@ -52,7 +52,7 @@ def create_breakdown_values(power_plants):
                     start_str = start_dt.strftime("%Y-%m-%d")
                     end_str = end_dt.strftime("%Y-%m-%d")
 
-                    break_down_dict[power_plant_id] = f"{start_str} - {end_str}"
+                    break_down_dict[power_plant_id] = f"{start_str} -- {end_str}"
                 except ValueError as e:
                     print(f"Error while handling the dates in powerPlants {power_plant_id}: {e}")
                     break_down_dict[power_plant_id] = "Incorret date"
@@ -145,6 +145,6 @@ else:
             result = filtered_adjusted_inverters(power_plants, desired_keys, latest_timestamps, pp_id_filter, break_down_filtered_date)
 
 
-            for item in result: 
-                print(item)
+            #for item in result: 
+                #print(item)
 
