@@ -72,7 +72,12 @@ def create_breakdown_values(power_plants):
 def format_power_diff_ratio(power_diff_ratio):
     if power_diff_ratio is None:
         return None
-    return round(power_diff_ratio * 100, 2)
+    return round(power_diff_ratio * 100, 1)
+
+def format_power_diff_quantity(power_diff_quantity):
+    if power_diff_quantity is None:
+        return None
+    return round(power_diff_quantity, 1)
 
 
 def filtered_adjusted_inverters(inverters, desired_keys, latest_timestamps, pp_id_filter, break_down_filtered_date):
@@ -83,11 +88,15 @@ def filtered_adjusted_inverters(inverters, desired_keys, latest_timestamps, pp_i
         power_plant_id = inverter.get('powerPlantId')
         #power_diff = inverter.get('inverterPowerDifference') #do not need to filter
         power_diff_ratio = inverter.get('inverterPowerDifferenceRatio') #modified 0.4 --> 0.1
+        power_diff_quantity = inverter.get('inverterPowerDifference')
 
         # Check for the conditions
         if  power_plant_id not in pp_id_filter:
             if (inverter.get('referenceInverterStatus') != "OK" or power_diff_ratio is not None and power_diff_ratio >= 0.1):
                     inverter_data = [inverter.get(key, None) for key in desired_keys]
+                    
+                    formatted_power_diff_quantity = format_power_diff_quantity(power_diff_quantity)
+                    inverter_data.insert(10, formatted_power_diff_quantity)
 
                     formatted_power_diff_ratio = format_power_diff_ratio(power_diff_ratio)
                     inverter_data.insert(10, formatted_power_diff_ratio)
@@ -133,7 +142,7 @@ else:
             desired_keys = [
                 'powerPlantId', 'name', 'locationCity', 'locationParcelNumber', 
                 'totalInverterCount', 'errorInverterCount', 
-                'referenceInverterStatus', 'inverterPowerDifference']
+                'referenceInverterStatus']
             pp_id_filter = [408, 409, 415, 455, 1331, 216, 1501, 1502, 1518, 1516, 1513, 1517, 381, 382, 
                             383, 1476, 146, 145, 144, 1620, 1651, 1649, 1653, 1648, 1546, 1548, 1648, 1655, 
                             1651, 1653, 1649, 1598, 1621]
