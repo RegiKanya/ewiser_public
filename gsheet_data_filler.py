@@ -154,6 +154,6 @@ else:
             result = filtered_adjusted_inverters(power_plants, desired_keys, latest_timestamps, pp_id_filter, break_down_filtered_date)
 
 
-            for item in result: 
-                print(item)
+            #for item in result: 
+                #print(item)
 
