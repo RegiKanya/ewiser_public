@@ -143,9 +143,9 @@ else:
                 'powerPlantId', 'name', 'locationCity', 'locationParcelNumber', 
                 'totalInverterCount', 'errorInverterCount', 
                 'referenceInverterStatus']
-            pp_id_filter = [408, 409, 415, 455, 1331, 216, 1501, 1502, 1518, 1516, 1513, 1517, 381, 382, 
-                            383, 1476, 146, 145, 144, 1620, 1651, 1649, 1653, 1648, 1546, 1548, 1648, 1655, 
-                            1651, 1653, 1649, 1598, 1621, 1673]
+            pp_id_filter = [144, 145, 146, 216, 381, 382, 383, 408, 409, 415, 455, 1331, 1476, 
+                            1501, 1502, 1513, 1516, 1517, 1518, 1546, 1548, 1598, 1620, 1621, 1648, 
+                            1648, 1649, 1649, 1651, 1651, 1653, 1653, 1655, 1673]
 
             # Assuming latest_timestamps is defined elsewhere in your code
             latest_timestamps = create_timestamp(power_plants)  
