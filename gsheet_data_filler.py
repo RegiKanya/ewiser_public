@@ -4,7 +4,6 @@ import glob
 
 #create a function which look for timestamp whihch can create the value for 'incident_timestamp'
 def create_timestamp(power_plants):
-    # Create a dictionary to store the latest timestamps for each power plant
     power_plants_dict = {}
 
     for power_plant in power_plants:
@@ -16,11 +15,9 @@ def create_timestamp(power_plants):
         for inverter in inverters:
             timestamp_str = inverter.get('startTimestamp')
             if timestamp_str:
-                # Convert the timestamp to a date object
                 timestamp_date = datetime.fromisoformat(timestamp_str.rstrip('Z'))
                 formatted_date = timestamp_date.strftime('%Y-%m-%d')
 
-                # Update the dictionary if this timestamp is newer
                 if not power_plants_dict[power_plant_id] or formatted_date > power_plants_dict[power_plant_id]:
                     power_plants_dict[power_plant_id] = formatted_date
 
@@ -62,11 +59,6 @@ def create_breakdown_values(power_plants):
     # Return after the outer loop finishes processing all power plants
     return break_down_dict
 
-# Extract power plants data safely using .get()
-#power_plants = data.get('body', {}).get('modbus', {}).get('powerPlants', [])
-#latest_timestamps = create_timestamp(power_plants)
-#break_down_filtered = data.get('body', {}).get('modbus', {}).get('powerPlants',[])
-#break_down_filtered_date = create_breakdown_values(power_plants)
 
 #make the power difference ratio prettier and multiple with 100 to show the percantage
 def format_power_diff_ratio(power_diff_ratio):
@@ -135,19 +127,16 @@ else:
                 print(f"🚨 No power plants found in {file_path}")
                 continue
 
-            # Create breakdown values for the power plants
             break_down_filtered_date = create_breakdown_values(power_plants)
 
-            # Define the keys you are interested in
             desired_keys = [
                 'powerPlantId', 'name', 'locationCity', 'locationParcelNumber', 
                 'totalInverterCount', 'errorInverterCount', 
                 'referenceInverterStatus']
-            pp_id_filter = [144, 145, 146, 216, 381, 382, 383, 408, 409, 415, 455, 1331, 1476, 
+            pp_id_filter = [144, 145, 146, 216, 381, 382, 383, 408, 409, 415, 455, 712, 1331, 1476, 
                             1501, 1502, 1513, 1516, 1517, 1518, 1546, 1548, 1598, 1620, 1621, 1648, 
                             1648, 1649, 1649, 1651, 1651, 1653, 1653, 1655, 1673]
 
-            # Assuming latest_timestamps is defined elsewhere in your code
             latest_timestamps = create_timestamp(power_plants)  
         
             # Process the inverters and filter them
