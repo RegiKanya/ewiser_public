@@ -1,5 +1,3 @@
-#create connection with the sheet 
-# Importing required library 
 import pygsheets 
 import pandas as pd
 from datetime import datetime
