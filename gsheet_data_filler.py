@@ -105,7 +105,7 @@ def filtered_adjusted_inverters(inverters, desired_keys, latest_timestamps, pp_i
     return filtered_inverters
 
 # read the json file in a dynamic way
-folder_path = '/Users/kanyaregina/json_files/'
+folder_path = '/Users/kanyaregina/Documents/Ewiser/inverter-errors/json_files/'
 today = datetime.today().strftime('%Y-%m-%d')
 json_file = glob.glob(f"{folder_path}{today}.json")
 

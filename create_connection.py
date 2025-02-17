@@ -4,7 +4,7 @@ from datetime import datetime
 from gsheet_data_filler import filtered_adjusted_inverters, power_plants, desired_keys,latest_timestamps, json_file, pp_id_filter, break_down_filtered_date
 
 # Create the Client 
-client = pygsheets.authorize(service_account_file="/Users/kanyaregina/Desktop/access_details/gsheet_ewiser.json") 
+client = pygsheets.authorize(service_account_file="/Users/kanyaregina/Documents/Ewiser/inverter-errors/access_details/gsheet_ewiser.json") 
 #print(client.spreadsheet_titles()) 
 
 def main():
