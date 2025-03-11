@@ -14,7 +14,7 @@
    
 These parameters filter out the inverter issue:
 'referenceInverterStatus' != OK &
-'inverterPowerDifferenceRatio' is not None and 'inverterPowerDifferenceRatio' >= 0.1
+'inverterPowerDifferenceRatio' >= 0.1
 
 ## 3. Handle issue and fill up the ACTION sheet with information
 ## 4. Push the Folyamatban button to move the process forward
