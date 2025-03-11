@@ -84,7 +84,8 @@ def filtered_adjusted_inverters(inverters, desired_keys, latest_timestamps, pp_i
 
         # Check for the conditions
         if  power_plant_id not in pp_id_filter:
-            if (inverter.get('referenceInverterStatus') != "OK" or power_diff_ratio is not None and power_diff_ratio >= 0.1):
+            if (inverter.get('referenceInverterStatus') != "OK" or power_diff_ratio is not None and power_diff_ratio >= 0.1
+                or inverter.get('errorInverterCount') > 0):
                     inverter_data = [inverter.get(key, None) for key in desired_keys]
                     
                     formatted_power_diff_quantity = format_power_diff_quantity(power_diff_quantity)
