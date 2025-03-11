@@ -1,5 +1,6 @@
 #ignore folder
 access_details/
+__pycache__
 
 #ingore individual files
 hourly-run-script.yml
