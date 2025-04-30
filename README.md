@@ -15,6 +15,8 @@
 These parameters filter out the inverter issue:
 'referenceInverterStatus' != OK &
 'inverterPowerDifferenceRatio' >= 0.1
+('errorInverterCount') > 0
++ hardcoded list about power_plants from which does not need to collect data
 
 ## 3. Handle issue and fill up the ACTION sheet with information
 ## 4. Push the Folyamatban button to move the process forward
