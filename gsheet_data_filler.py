@@ -134,7 +134,7 @@ else:
                 'powerPlantId', 'name', 'locationCity', 'locationParcelNumber', 
                 'totalInverterCount', 'errorInverterCount', 
                 'referenceInverterStatus']
-            pp_id_filter = [144, 145, 146, 216, 381, 382, 383, 408, 409, 415, 455, 712, 1331, 1476, 
+            pp_id_filter = [144, 145, 146, 216, 381, 382, 383, 408, 409, 415, 455, 712, 713, 1331, 1476, 
                             1501, 1502, 1513, 1516, 1517, 1518, 1546, 1548, 1598, 1620, 1621, 1648, 
                             1648, 1649, 1649, 1651, 1651, 1653, 1653, 1655, 1673]
 
