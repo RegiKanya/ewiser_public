@@ -1,6 +1,6 @@
 import unittest
 from datetime import datetime
-from gsheet_data_filler import create_breakdown_values, create_timestamp, filtered_adjusted_inverters
+from ewiser_public.process_data_to_gsheet import create_breakdown_values, create_timestamp, filtered_adjusted_inverters
 
 class TestPowerPlantFunctions(unittest.TestCase):
 

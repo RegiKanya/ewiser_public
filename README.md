@@ -3,13 +3,17 @@
 ## Process
 
 ## 1. Download the new inverter errors json
+(jelenleg manuális, fejlesztői feladat és csak lokálban futatott)
    - open the ewiser dashboard
    - Vezérlőpult --> Inverter hibák
    - F12 or right click - Inspect
-   - Network and dowload the {;}latest-error-log?siId=424 reponse
+   - Network and download the {;}latest-error-log?siId=424 reponse (required folder: json_files)
    - json has to be named: yyyy-mm-dd.json (today date)
-   - go to the script run create_connection.py code
-   
+   - Download data for sig_id=119 (to the required folder: market_119)
+   - json has to be named: yyyy-mm-dd.json (today date)
+   - go to the script run load_data_to_gsheet.py code
+
+------------------- innentől már ügyintézői lépések ---------------------------
 ## 2. Run Hibák frissítése button
    
 These parameters filter out the inverter issue:
@@ -17,6 +21,7 @@ These parameters filter out the inverter issue:
 'inverterPowerDifferenceRatio' >= 0.1
 ('errorInverterCount') > 0
 + hardcoded list about power_plants from which does not need to collect data
++ hardcoded list about KÁT power_plants included (Balázs néhány saját parkot is szeretne monitorozni ebben a sheetben, ami sig=119, így máshonnan kell betölteni)
 
 ## 3. Handle issue and fill up the ACTION sheet with information
 ## 4. Push the Folyamatban button to move the process forward
