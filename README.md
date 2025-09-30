@@ -1,32 +1,36 @@
 # ewiser_public
 
-## Process
+## A munkafolyamat két fő szakaszból áll:
+- Fejlesztői feladatok: Az adatok manuális letöltése az Ewiser felületéről és azok feldolgozása egy Python script segítségével.
+- Ügyintézői feladatok: A feldolgozott adatok alapján a hibák kezelése és adminisztrációja a Google Sheets felületén.
 
-## 1. Download the new inverter errors json
-(jelenleg manuális, fejlesztői feladat és csak lokálban futatott)
-   - open the ewiser dashboard
-   - Vezérlőpult --> Inverter hibák
-   - F12 or right click - Inspect
-   - Network and download the {;}latest-error-log?siId=424 reponse (required folder: json_files)
-   - json has to be named: yyyy-mm-dd.json (today date)
-   - Download data for sig_id=119 (to the required folder: market_119)
-   - json has to be named: yyyy-mm-dd.json (today date)
-   - go to the script run load_data_to_gsheet.py code
+## 1. Fejlesztői lépések (Adatkinyerés és -feldolgozás)
+Ezt a folyamatot minden reggel el kell végezni a naprakész hibajelentések érdekében.
 
-------------------- innentől már ügyintézői lépések ---------------------------
-## 2. Run Hibák frissítése button
-   
-These parameters filter out the inverter issue:
-'referenceInverterStatus' != OK &
-'inverterPowerDifferenceRatio' >= 0.1
-('errorInverterCount') > 0
-+ hardcoded list about power_plants from which does not need to collect data
-+ hardcoded list about KÁT power_plants included (Balázs néhány saját parkot is szeretne monitorozni ebben a sheetben, ami sig=119, így máshonnan kell betölteni)
+# Adatok letöltése
+Két különböző adatkészlet letöltése szükséges:
+# A. Piacos erőművek inverter hibái (siId=424)
+1. Nyissa meg az Ewiser vezérlőpultját, majd navigáljon az Inverter hibák menüponthoz.
+2. A böngésző fejlesztői eszköztárát (F12 vagy jobb klikk -> Inspect) megnyitva válassza a Network (Hálózat) fület.
+3. Keresse meg és töltse le a latest-error-log?siId=424 hálózati kérésre érkező választ (response).
+4. Mentse el a JSON fájlt a json_files mappába, a következő névadási konvencióval: éééé-hh-nn.json (pl. 2025-09-30.json).
 
-## 3. Handle issue and fill up the ACTION sheet with information
-## 4. Push the Folyamatban button to move the process forward
-## 5. Repeat the process time to time
-   - do the manual downloading then run the script every morning
+# B. Kiemelt KÁT erőművek hibái (sig_id=119)
+1. Hajtsa végre ugyanazt a letöltési folyamatot a sig_id=119 azonosítóval is, hogy a specifikus, monitorozni kívánt erőművek adatai is rendelkezésre álljanak.
+2. Mentse el ezt a JSON fájlt a market_119 mappába, szintén éééé-hh-nn.json néven.
+
+# Adatok feldolgozása
+A letöltések után futtassa a load_data_to_gsheet.py Python scriptet. Ez a script feldolgozza a JSON fájlokat, alkalmazza a szűrési logikát és feltölti a releváns adatokat a cél Google Sheets dokumentumba.
+
+## 2. Ügyintézői lépések (Hibakezelés)
+# Hibák frissítése és szűrése
+A Google Sheets dokumentumban kattintson a Hibák frissítése gombra. A megjelenő lista az alábbi feltételek alapján szűrt hibákat tartalmazza:
+- A referencia inverter állapota nem OK.
+- A teljesítménykülönbség aránya 10% vagy annál nagyobb (>= 0.1).
+- A hibás inverterek száma több, mint nulla.
+
+Fontos: A rendszer automatikusan figyelmen kívül hagy bizonyos, előre definiált erőműveket, miközben a kiemelt KÁT erőműveket (sig_id=119) mindig feldolgozza.
+
      
 
 (Further Improvements) import the data into the spreadsheet (RAW sheet)

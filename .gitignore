@@ -1,6 +1,9 @@
 #ignore folder
 access_details/
 __pycache__
+json_files/
+market_119
 
 #ingore individual files
 hourly-run-script.yml
+.DS_Store
