@@ -137,7 +137,7 @@ sources = [
     {
         "name": "MARKET_119",
         "folder": "/Users/kanyaregina/Documents/Ewiser/inverter-errors/market_119/",
-        "filter": [1419, 1442, 1443, 1444],
+        "filter": [1419, 1442, 1443, 1444, 1544, 1127,1128,1125,1126,1699,289,294,1157],
         "is_whitelist": True 
     }
 ]
