@@ -63,7 +63,7 @@ def format_power_diff_quantity(power_diff_quantity):
         return None
     return round(power_diff_quantity, 1)
 
-def filtered_adjusted_inverters(inverters, desired_keys, latest_timestamps, pp_id_filter, break_down_filtered_date, is_whitelist=False):
+def filtered_adjusted_inverters(inverters, desired_keys, latest_timestamps, pp_id_filter, break_down_filtered_date, group_id, energy_storgae_parks = [],is_whitelist=False):
     filtered_inverters = []
 
     for inverter in inverters:
@@ -89,13 +89,22 @@ def filtered_adjusted_inverters(inverters, desired_keys, latest_timestamps, pp_i
                                         
                     if power_plant_id in break_down_filtered_date:
                         inverter_data.insert(6, break_down_filtered_date[power_plant_id])
+                    
+                    final_gorup_id = group_id
+                    if isinstance(group_id, list):
+                        if power_plant_id in energy_storgae_parks:
+                            final_gorup_id = "AKKU"
+                        else:
+                            final_gorup_id = group_id[0]
+                    
+                    #inverter_data.insert(2,final_gorup_id)
 
                     filtered_inverters.append(inverter_data)
         else: 
             pass
     return filtered_inverters
 
-def process_json_files(file_paths, id_filter, is_whitelist_mode):
+def process_json_files(file_paths, id_filter, is_whitelist_mode, group_id, energy_storage_parks):
 
     processed_data = []
     for file_path in file_paths:
@@ -122,7 +131,7 @@ def process_json_files(file_paths, id_filter, is_whitelist_mode):
             'powerPlantId', 'name', 'locationCity', 'locationParcelNumber',
             'totalInverterCount', 'errorInverterCount', 'referenceInverterStatus']
 
-        result = filtered_adjusted_inverters(power_plants, desired_keys, latest_timestamps, id_filter, break_down_filtered_date, is_whitelist=is_whitelist_mode)
+        result = filtered_adjusted_inverters(power_plants, desired_keys, latest_timestamps, id_filter, break_down_filtered_date, group_id,energy_storgae_parks=energy_storage_parks, is_whitelist=is_whitelist_mode)
         processed_data.extend(result)
 
     return processed_data
@@ -132,13 +141,16 @@ sources = [
         "name": "MARKET_424",
         "folder": "/Users/kanyaregina/Documents/Ewiser/inverter-errors/json_files/",
         "filter": [144, 145, 146, 216, 381, 382, 383, 408, 409, 415, 455, 712, 713, 1331, 1476, 1501, 1502, 1513, 1516, 1517, 1518, 1546, 1548, 1598, 1620, 1621, 1648, 1649, 1651, 1653, 1655, 1673, 1784,1805,1823,1824,1825,1826,1827,1828,1820,1821,1829,1831,1833,1832,1834,1830],
-        "is_whitelist": False 
+        "energy_storage_parks": [1791, 1798, 1799, 1803, 1804, 1812, 1819, 1838, 1840, 1848, 1849, 1875, 1876],
+        "is_whitelist": False,
+        "power_control_group_id": [424, "AKKU"]
     },
     {
         "name": "MARKET_119",
         "folder": "/Users/kanyaregina/Documents/Ewiser/inverter-errors/market_119/",
         "filter": [1419, 1442, 1443, 1444, 1544, 1127,1128,1125,1126,1699,289,294,1157],
-        "is_whitelist": True 
+        "is_whitelist": True,
+        "power_control_group_id": 119 
     }
 ]
 
@@ -152,6 +164,7 @@ for source in sources:
 
     file_pattern = os.path.join(source['folder'], f"{today_str}.json")
     found_files = glob.glob(file_pattern)
+    energy_storage_parks = source.get('energy_storage_parks',[])
 
     if not found_files:
         print(f"🟡 No JSON file found for today in folder: '{source['folder']}'\n")
@@ -162,7 +175,9 @@ for source in sources:
     result_from_source = process_json_files(
         file_paths=found_files,
         id_filter=source['filter'],
-        is_whitelist_mode=source['is_whitelist']
+        is_whitelist_mode=source['is_whitelist'],
+        group_id=source['power_control_group_id'],
+        energy_storage_parks=energy_storage_parks
     )
 
     print(f"Processed {len(result_from_source)} items from this source.")
@@ -171,6 +186,6 @@ for source in sources:
 print(f"✅ Processing complete! The final combined list contains {len(all_results)} items.")
 
 # Optional: Print the first few items to verify
-#print("\nFirst 30 items in the combined list:")
-#for item in all_results[:30]:
-#    print(item)
+print("\nFirst 30 items in the combined list:")
+for item in all_results[:300]:
+    print(item)
