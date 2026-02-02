@@ -13,8 +13,8 @@ def main():
     if isinstance(data, list):
         data = pd.DataFrame(data)
     worksheet = sheet.worksheet_by_title('RAW')  # or worksheet = sheet.worksheet_by_title('Munkalap neve')
-    worksheet.clear()
-    worksheet.update_value('A1',f"Utoljára frissítve: {date}") #M1-re átírni a dátum frissítést
+    worksheet.clear(start='A2')
+    worksheet.update_value('M1',f"Utoljára frissítve: {date}") 
     worksheet.set_dataframe(data, (2, 1), copy_head=False) #(2nd row, 1st column)
     print(f"✅ DONE - Data has been successfully cleared and reloaded for:'{today_str}'.")
 

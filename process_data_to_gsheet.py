@@ -97,7 +97,7 @@ def filtered_adjusted_inverters(inverters, desired_keys, latest_timestamps, pp_i
                         else:
                             final_gorup_id = group_id[0]
                     
-                    #inverter_data.insert(2,final_gorup_id)
+                    inverter_data.insert(2,final_gorup_id)
 
                     filtered_inverters.append(inverter_data)
         else: 
@@ -186,6 +186,6 @@ for source in sources:
 print(f"✅ Processing complete! The final combined list contains {len(all_results)} items.")
 
 # Optional: Print the first few items to verify
-print("\nFirst 30 items in the combined list:")
-for item in all_results[:300]:
-    print(item)
+#print("\nFirst 30 items in the combined list:")
+#for item in all_results[:300]:
+#    print(item)
